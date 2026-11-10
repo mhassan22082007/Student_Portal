@@ -8,8 +8,8 @@ class Student
     private String username;
     private String password;
     private double cgpa;
-    private int monthlyAttendance;
-    private ArrayList<Integer> monthlyTestScores;
+    private int monthlyAttendance; 
+    private ArrayList<Integer> monthlyTestScores; 
 
     public Student(String rollNo, String username, String password, double cgpa, int monthlyAttendance, ArrayList<Integer> monthlyTestScores) 
     {
@@ -30,6 +30,11 @@ class Student
     public ArrayList<Integer> getMonthlyTestScores() { return monthlyTestScores; }
     
 
+    public void setPassword(String newPassword) 
+    {
+        this.password = newPassword;
+    }
+    
     public String getScoresAsString() 
     {
         StringBuilder sb = new StringBuilder();
@@ -68,7 +73,6 @@ class PortalSystem
     public PortalSystem() 
     {
         loadDataFromFile();
-
         if (studentDatabase.isEmpty()) 
         {
             seedInitialData();
@@ -78,8 +82,6 @@ class PortalSystem
     private void seedInitialData() 
     {
         System.out.println("Initializing database with 10 sample students...");
-        
-
         registerStudent("FA26-001", "ali_ahmed", "pass123", 3.82, 92, createScores(85, 90, 88));
         registerStudent("FA26-002", "zara_khan", "pass456", 3.95, 96, createScores(95, 98, 92));
         registerStudent("FA26-003", "usman_99", "pass789", 3.41, 80, createScores(70, 75, 82));
@@ -106,10 +108,9 @@ class PortalSystem
             if (s.getRollNo().equalsIgnoreCase(rollNo)) return false;
             if (s.getUsername().equalsIgnoreCase(username)) return false;
         }
-        
         Student newStudent = new Student(rollNo, username, password, cgpa, attendance, scores);
         studentDatabase.add(newStudent);
-        saveAllDataToFile();
+        saveAllDataToFile(); 
         return true;
     }
 
@@ -125,21 +126,15 @@ class PortalSystem
         return null;
     }
 
-
     public int getStudentRank(Student target) 
     {
-
         ArrayList<Student> sortedList = new ArrayList<>(studentDatabase);
-        
-
         sortedList.sort((s1, s2) -> Double.compare(s2.getCgpa(), s1.getCgpa()));
-        
-
         for (int i = 0; i < sortedList.size(); i++) 
         {
             if (sortedList.get(i).getRollNo().equals(target.getRollNo())) 
             {
-                return i + 1; // Ranks start at position index 1
+                return i + 1;
             }
         }
         return sortedList.size();
@@ -151,10 +146,10 @@ class PortalSystem
     }
 
 
-    private void saveAllDataToFile() 
+    void saveAllDataToFile() 
     {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, false))) 
-        {
+        { 
             for (Student s : studentDatabase) 
             {
                 writer.write(s.getRollNo() + "," + 
@@ -191,14 +186,12 @@ class PortalSystem
                     double cgpa = Double.parseDouble(data[3]);
                     int attendance = Integer.parseInt(data[4]);
                     
-                
                     String[] scoresRaw = data[5].split("\\|");
                     ArrayList<Integer> scores = new ArrayList<>();
                     for (String s : scoresRaw) 
                     {
                         scores.add(Integer.parseInt(s));
                     }
-                    
                     studentDatabase.add(new Student(rollNo, username, password, cgpa, attendance, scores));
                 }
             }
@@ -261,33 +254,61 @@ public class Student_Portal_Application
                 
             } 
             else if (choice == 2) 
-                {
+            {
                 System.out.print("Account Username: ");
                 String user = sc.nextLine();
                 System.out.print("Secure Password: ");
                 String pass = sc.nextLine();
+
                 Student currentStudent = portal.login(user, pass);
                 if (currentStudent != null) 
                 {
-                 int rank = portal.getStudentRank(currentStudent);
-                 int total = portal.getTotalStudentCount();
-                 currentStudent.displayPortalData(rank, total);
-                } 
+                    boolean inPortal = true;
+                    while (inPortal) 
+                    {
+                        int rank = portal.getStudentRank(currentStudent);
+                        int total = portal.getTotalStudentCount();
+                        currentStudent.displayPortalData(rank, total);
+                        System.out.println("--- Dashboard Actions ---");
+                        System.out.println("1. Change Security Password");
+                        System.out.println("2. Return to Main Menu");
+                        System.out.print("Select action: ");
+                        int portalChoice = sc.nextInt();
+                        sc.nextLine();
+                        if (portalChoice == 1) 
+                        {
+                        System.out.print("Enter your new secure password: ");
+                        String newPass = sc.nextLine();
+                        currentStudent.setPassword(newPass);
+                        portal.saveAllDataToFile();
+                        System.out.println("Success: Security password updated permanently!");
+                        } 
+                        else if (portalChoice == 2) 
+                        {
+                        System.out.println("Logging out of portal session safely...");
+                        inPortal = false;
+                        } 
+                        else 
+                        {
+                        System.out.println("Invalid action parameter!");
+                        }
+                    }
+                }
                 else 
                 {
-                 System.out.println("Access Denied: Combination match failed.");
+                    System.out.println("Access Denied: Combination match failed.");
                 }
             }   
             else if (choice == 3) 
             {
-             System.out.println("Deactivating interface... Core updated cleanly.");
-             break;
+                System.out.println("Deactivating interface... Core updated cleanly.");
+                break;
             } 
             else 
             {
-             System.out.println("Option out of bounds!");
+                System.out.println("Option out of bounds!");
             }
-        }
+        } 
         sc.close();
     }
 }
