@@ -1,6 +1,6 @@
 # Campus Hub - Management & Portal System (OOP Java)
 
-A console-based Student and Teacher Management System built in Java using core Object-Oriented Programming (OOP) principles. The system features role-based access control (Master Admin, Teachers, and Students), inheritance-driven data modeling, dynamic CGPA class ranking, and automated persistent text-file storage.
+A console-based Student and Teacher Management System built in Java using core Object-Oriented Programming (OOP) principles. The system features strict role-based access control (Headmaster/Master Admin, Teachers, and Students), inheritance-driven data modeling, dynamic CGPA class ranking, crash-proof input validation, and automated persistent text-file storage.
 
 ---
 
@@ -10,28 +10,32 @@ The application automatically seeds **10 sample student accounts** and **2 sampl
 
 | Role | Login Credentials | Access & Capabilities |
 | :--- | :--- | :--- |
-| **Master Admin** | Master Key: `ADMIN2026` | Full system control: view, add, modify, and remove any student or teacher record. |
-| **Teacher (Sample 1)** | User: `prof_tariq` / Pass: `teach123` | View own profile, modify any student's records, and approve student username changes. |
-| **Teacher (Sample 2)** | User: `miss_nadia` / Pass: `teach456` | View own profile, modify any student's records, and approve student username changes. |
-| **Student (Top Rank)** | User: `zara_khan` / Pass: `pass456` | View personal portal (Rank **1 of 10**), change password, or change username with teacher approval. |
-| **Student (Mid Rank)** | User: `fatima_a` / Pass: `secure77` | View personal portal (Rank **5 of 10**), change password, or change username with teacher approval. |
+| **Headmaster (Master Admin)** | Master Key: `ADMIN2026` | Full system access: view, add, modify, and remove any student or teacher record. |
+| **Teacher (Sample 1)** | User: `prof_tariq` / Pass: `teach123` | Register new students, modify student records, update own password/phone, and approve student username changes. |
+| **Teacher (Sample 2)** | User: `miss_nadia` / Pass: `teach456` | Register new students, modify student records, update own password/phone, and approve student username changes. |
+| **Student (Top Rank)** | User: `zara_khan` / Pass: `pass456` | View personal portal (Rank **1 of 10**), change own password, or request a unique username change with teacher approval. |
+| **Student (Mid Rank)** | User: `fatima_a` / Pass: `secure77` | View personal portal (Rank **5 of 10**), change own password, or request a unique username change with teacher approval. |
 
 ---
 
-## Core Features
+## Main Menu & Role Permissions
 
-* **Master Admin Panel:** Protected by a Master Key to inspect all database records, register or remove teachers and students, and modify any profile field.
-* **Teacher Portal:** Allows faculty to view attendance and salary details, update student academic records, and authorize student username changes. Editing a teacher's own profile requires Master Key authorization.
-* **Student Portal:** Displays Roll Number, CNIC, Phone Number, CGPA, dynamic class standing, monthly attendance percentage, and recent test scores.
-* **Permanent File Storage:** Automatically reads and writes records to `students_portal_data.txt` and `teachers_portal_data.txt` so all changes persist after shutting down the program.
+Public self-registration is disabled on the main screen to maintain realistic institutional security:
+
+1. **Student Login:** Students can inspect their Roll Number, CNIC, Phone Number, CGPA, live class rank, attendance, and test scores. They can update their own password directly, or change their username (validated for uniqueness) after live teacher login approval.
+2. **Teacher Login:** Faculty can view their profile, register new students, update student academic records, and change their own password or phone number. Modifying sensitive fields (Salary, Attendance, Teacher ID, CNIC, Username) requires the Headmaster's Master Key.
+3. **Headmaster / Master Admin Panel:** Unlocked via the Master Key for full administrative control over all student and teacher accounts.
+4. **Shut Down System:** Safely exits the application.
 
 ---
 
-## OOP Architecture
+## OOP Architecture & Technical Highlights
 
 * **Inheritance & Abstraction (`Person` Superclass):** Common attributes (`username`, `password`, `cnic`, `phoneNo`) are defined in an abstract `Person` superclass and inherited by both `Student` and `Teacher` subclasses.
-* **Encapsulation:** All class attributes are strictly `private` or `protected`, exposing state updates only through validated getters and setters.
-* **Collections & Sorting:** Uses dynamic `ArrayList` collections for runtime storage and clones the student list with a custom `Comparator` to calculate real-time class rankings without altering database order.
+* **Encapsulation:** All class fields are `private` or `protected`, exposing state updates strictly through validated getters and setters.
+* **Collections & Sorting:** Uses dynamic `ArrayList` collections for runtime storage and clones the student list with a custom `Comparator` to compute real-time class rankings without altering database order.
+* **Crash-Proof Input Handling:** Custom `getSafeInt` and `getSafeDouble` helpers catch invalid keyboard inputs (`NumberFormatException`) so accidental text entries never terminate the console loop.
+* **Permanent File Storage:** Automatically reads and writes records to `students_portal_data.txt` and `teachers_portal_data.txt` so all changes persist across sessions.
 
 ---
 
@@ -39,9 +43,9 @@ The application automatically seeds **10 sample student accounts** and **2 sampl
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/mhassan22082007/Student_Portal.git
+   git clone https://github.com
    ```
-2. Navigate into the folder and compile the Java source file:
+2. Navigate into the project directory and compile the Java source file:
    ```bash
    javac Student_Portal_Application.java
    ```
