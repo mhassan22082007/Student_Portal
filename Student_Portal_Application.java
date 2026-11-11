@@ -387,86 +387,45 @@ public class Student_Portal_Application
     {
         PortalSystem portal = new PortalSystem();
         Scanner sc = new Scanner(System.in);
+
         while (true) 
         {
             System.out.println("\n=== CAMPUS HUB MANAGEMENT SYSTEM ===");
             System.out.println("1. Student Login");
-            System.out.println("2. Register New Student");
-            System.out.println("3. Teacher Login");
-            System.out.println("4. Register New Teacher (Requires Master Key)");
-            System.out.println("5. Master Admin Panel (Requires Master Key)");
-            System.out.println("6. Shut Down System");
+            System.out.println("2. Teacher Login");
+            System.out.println("3. Headmaster / Master Admin Panel");
+            System.out.println("4. Shut Down System");
             System.out.print("Select Action: ");
+
             int choice = getSafeInt(sc);
-            sc.nextLine();
+
             if (choice == 1) 
             {
-                // STUDENT LOGIN
-                System.out.print("Username: ");
+                System.out.print("Student Username: ");
                 String user = sc.nextLine();
-                System.out.print("Password: ");
+                System.out.print("Student Password: ");
                 String pass = sc.nextLine();
                 Student s = portal.loginStudent(user, pass);
-                if (s != null) 
-                {
-                    handleStudentDashboard(portal, sc, s);
-                } 
-                else 
-                {
-                    System.out.println("Access Denied: Invalid student credentials.");
-                }
+                if (s != null) handleStudentDashboard(portal, sc, s);
+                else System.out.println("Access Denied: Invalid student credentials.");
             } 
             else if (choice == 2) 
             {
-                // REGISTER STUDENT
-                addNewStudentFlow(portal, sc);
-            } 
-            else if (choice == 3) 
-            {
-                // TEACHER LOGIN
                 System.out.print("Teacher Username: ");
                 String user = sc.nextLine();
                 System.out.print("Teacher Password: ");
                 String pass = sc.nextLine();
                 Teacher t = portal.loginTeacher(user, pass);
-                if (t != null) 
-                {
-                    handleTeacherDashboard(portal, sc, t);
-                } 
-                else 
-                {
-                    System.out.println("Access Denied: Invalid teacher credentials.");
-                }
+                if (t != null) handleTeacherDashboard(portal, sc, t);
+                else System.out.println("Access Denied: Invalid teacher credentials.");
+            } 
+            else if (choice == 3) 
+            {
+                System.out.print("Enter Headmaster Master Key: ");
+                if (portal.verifyMasterKey(sc.nextLine())) handleMasterAdminPanel(portal, sc);
+                else System.out.println("Access Denied: Incorrect Master Key!");
             } 
             else if (choice == 4) 
-            {
-                // REGISTER TEACHER (REQUIRES MASTER KEY)
-                System.out.print("Enter Master Key to authorize teacher registration: ");
-                String key = sc.nextLine();
-                if (portal.verifyMasterKey(key)) 
-                {
-                    addNewTeacherFlow(portal, sc);
-                } 
-                else 
-                {
-                    System.out.println("Authorization Failed: Incorrect Master Key!");
-                }
-            } 
-            else if (choice == 5) 
-            {
-                // MASTER ADMIN PANEL
-                System.out.print("Enter Master Key: ");
-                String key = sc.nextLine();
-                if (portal.verifyMasterKey(key)) 
-                {
-                    handleMasterAdminPanel(portal, sc);
-                } 
-                else 
-                {
-                    System.out.println("Access Denied: Incorrect Master Key!");
-                }
-            } 
-            else if (choice == 6) 
             {
                 System.out.println("Shutting down system cleanly...");
                 break;
@@ -485,8 +444,7 @@ public class Student_Portal_Application
         {
             try 
             {
-                int val = Integer.parseInt(sc.nextLine().trim());
-                return val;
+                return Integer.parseInt(sc.nextLine().trim());
             } 
             catch (NumberFormatException e) 
             {
@@ -501,8 +459,7 @@ public class Student_Portal_Application
         {
             try 
             {
-                double val = Double.parseDouble(sc.nextLine().trim());
-                return val;
+                return Double.parseDouble(sc.nextLine().trim());
             } 
             catch (NumberFormatException e) 
             {
@@ -510,7 +467,7 @@ public class Student_Portal_Application
             }
         }
     }
-    // --- STUDENT DASHBOARD ---
+
     private static void handleStudentDashboard(PortalSystem portal, Scanner sc, Student s) 
     {
         boolean active = true;
@@ -522,8 +479,9 @@ public class Student_Portal_Application
             System.out.println("2. Change Username (Requires Teacher Approval)");
             System.out.println("3. Logout");
             System.out.print("Select action: ");
+
             int act = getSafeInt(sc);
-            sc.nextLine();
+
             if (act == 1) 
             {
                 System.out.print("Enter new password: ");
@@ -576,27 +534,59 @@ public class Student_Portal_Application
         {
             t.displayTeacherData();
             System.out.println("--- Teacher Actions ---");
-            System.out.println("1. Modify a Student's Data");
-            System.out.println("2. Modify Own Profile Data (Requires Master Key)");
-            System.out.println("3. Logout");
+            System.out.println("1. Register a New Student");
+            System.out.println("2. Modify a Student's Data");
+            System.out.println("3. Update Own Password & Contact Info");
+            System.out.println("4. Modify Full Profile Data (Requires Headmaster Master Key)");
+            System.out.println("5. Logout");
             System.out.print("Select action: ");
 
             int act = getSafeInt(sc);
 
             if (act == 1) 
             {
+                addNewStudentFlow(portal, sc);
+            } 
+            else if (act == 2) 
+            {
                 System.out.print("Enter Student Roll No to modify (e.g. FA26-001): ");
                 Student target = portal.findStudentByRoll(sc.nextLine());
                 if (target != null) modifyStudentHelper(portal, sc, target);
                 else System.out.println("Student not found!");
             } 
-            else if (act == 2) 
+            else if (act == 3) 
             {
-                System.out.print("Enter Master Key to unlock profile editing: ");
+                System.out.println("\n--- Self-Service Update ---");
+                System.out.println("1. Change Password");
+                System.out.println("2. Update Phone Number");
+                System.out.print("Choose option: ");
+                int selfOpt = getSafeInt(sc);
+                if (selfOpt == 1) 
+                {
+                    System.out.print("Enter new password: ");
+                    t.setPassword(sc.nextLine());
+                    portal.saveAllTeachersToFile();
+                    System.out.println("Password updated successfully!");
+                } 
+                else if (selfOpt == 2) 
+                {
+                    System.out.print("Enter new Phone No: ");
+                    t.setPhoneNo(sc.nextLine());
+                    portal.saveAllTeachersToFile();
+                    System.out.println("Phone number updated successfully!");
+                } 
+                else 
+                {
+                    System.out.println("Invalid option!");
+                }
+            } 
+            else if (act == 4) 
+            {
+                System.out.print("Enter Headmaster Master Key to unlock full profile editing: ");
                 if (portal.verifyMasterKey(sc.nextLine())) modifyTeacherHelper(portal, sc, t);
                 else System.out.println("Authorization Failed: Incorrect Master Key!");
             } 
-            else if (act == 3) 
+            else if (act == 5) 
             {
                 active = false;
             } 
@@ -612,18 +602,18 @@ public class Student_Portal_Application
         boolean active = true;
         while (active) 
         {
-            System.out.println("\n================ MASTER ADMIN PANEL ================");
+            System.out.println("\n================ HEADMASTER ADMIN PANEL ================");
             System.out.println("1. View All Students");
             System.out.println("2. Add New Student");
             System.out.println("3. Modify Any Student Data");
             System.out.println("4. Remove a Student");
-            System.out.println("----------------------------------------------------");
+            System.out.println("--------------------------------------------------------");
             System.out.println("5. View All Teachers");
             System.out.println("6. Add New Teacher");
             System.out.println("7. Modify Any Teacher Data");
             System.out.println("8. Remove a Teacher");
-            System.out.println("----------------------------------------------------");
-            System.out.println("9. Exit Master Panel");
+            System.out.println("--------------------------------------------------------");
+            System.out.println("9. Exit Headmaster Panel");
             System.out.print("Select Admin Action: ");
 
             int act = getSafeInt(sc);
@@ -654,9 +644,10 @@ public class Student_Portal_Application
                     break;
                 case 5:
                     System.out.println("\n--- ALL REGISTERED TEACHERS ---");
-                    for (Teacher t : portal.getAllTeachers()) {
+                    for (Teacher t : portal.getAllTeachers()) 
+                    {
                         System.out.printf("ID: %s | User: %s | CNIC: %s | Phone: %s | Attend: %d%% | Salary: Rs. %.2f\n",
-                                t.getTeacherId(), t.getUsername(), t.getCnic(), t.getPhoneNo(), t.getMonthlyAttendance(), t.getSalary());
+                        t.getTeacherId(), t.getUsername(), t.getCnic(), t.getPhoneNo(), t.getMonthlyAttendance(), t.getSalary());
                     }
                     break;
                 case 6:
@@ -706,7 +697,6 @@ public class Student_Portal_Application
             System.out.print("Test " + i + ": ");
             scores.add(getSafeInt(sc));
         }
-        sc.nextLine();
 
         if (portal.registerStudent(roll, user, pass, cnic, phone, cgpa, attend, scores)) 
         {
@@ -734,7 +724,6 @@ public class Student_Portal_Application
         int attend = getSafeInt(sc);
         System.out.print("Enter Monthly Salary: ");
         double salary = getSafeDouble(sc);
-        sc.nextLine();
 
         if (portal.registerTeacher(id, user, pass, cnic, phone, attend, salary)) 
         {
@@ -745,7 +734,6 @@ public class Student_Portal_Application
             System.out.println("Failed: Teacher ID or Username already exists.");
         }
     }
-
     private static void modifyStudentHelper(PortalSystem portal, Scanner sc, Student s) 
     {
         System.out.println("\nModifying Student: " + s.getRollNo() + " (" + s.getUsername() + ")");
@@ -758,7 +746,6 @@ public class Student_Portal_Application
         System.out.println("7. Update Test Scores");
         System.out.print("Choose field to update: ");
         int opt = getSafeInt(sc);
-        sc.nextLine();
 
         if (opt == 1) 
         {
@@ -804,13 +791,11 @@ public class Student_Portal_Application
         {
             System.out.print("New CGPA: ");
             s.setCgpa(getSafeDouble(sc));
-            sc.nextLine();
         } 
         else if (opt == 6) 
         {
             System.out.print("New Attendance (%): ");
             s.setMonthlyAttendance(getSafeInt(sc));
-            sc.nextLine();
         } 
         else if (opt == 7) 
         {
@@ -820,7 +805,6 @@ public class Student_Portal_Application
                 System.out.print("New Test " + i + " Score: ");
                 newScores.add(getSafeInt(sc));
             }
-            sc.nextLine();
             s.setMonthlyTestScores(newScores);
         } 
         else 
@@ -842,7 +826,6 @@ public class Student_Portal_Application
         System.out.println("5. Update Salary");
         System.out.print("Choose field to update: ");
         int opt = getSafeInt(sc);
-        sc.nextLine();
 
         if (opt == 1) 
         {
@@ -884,13 +867,11 @@ public class Student_Portal_Application
         {
             System.out.print("New Attendance (%): ");
             t.setMonthlyAttendance(getSafeInt(sc));
-            sc.nextLine();
         } 
         else if (opt == 5) 
         {
             System.out.print("New Salary: ");
             t.setSalary(getSafeDouble(sc));
-            sc.nextLine();
         } 
         else 
         {
