@@ -3,13 +3,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 // ================= 1. SUPERCLASS (INHERITANCE) =================
-abstract class Person {
+abstract class Person 
+{
     protected String username;
     protected String password;
     protected String cnic;
     protected String phoneNo;
 
-    public Person(String username, String password, String cnic, String phoneNo) {
+    public Person(String username, String password, String cnic, String phoneNo) 
+    {
         this.username = username;
         this.password = password;
         this.cnic = cnic;
@@ -31,13 +33,15 @@ abstract class Person {
 }
 
 // ================= 2. SUBCLASSES =================
-class Student extends Person {
+class Student extends Person 
+{
     private String rollNo;
     private double cgpa;
     private int monthlyAttendance;
     private ArrayList<Integer> monthlyTestScores;
 
-    public Student(String rollNo, String username, String password, String cnic, String phoneNo, double cgpa, int monthlyAttendance, ArrayList<Integer> monthlyTestScores) {
+    public Student(String rollNo, String username, String password, String cnic, String phoneNo, double cgpa, int monthlyAttendance, ArrayList<Integer> monthlyTestScores) 
+    {
         super(username, password, cnic, phoneNo);
         this.rollNo = rollNo;
         this.cgpa = cgpa;
@@ -57,16 +61,19 @@ class Student extends Person {
     public ArrayList<Integer> getMonthlyTestScores() { return monthlyTestScores; }
     public void setMonthlyTestScores(ArrayList<Integer> scores) { this.monthlyTestScores = scores; }
 
-    public String getScoresAsString() {
+    public String getScoresAsString() 
+    {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < monthlyTestScores.size(); i++) {
+        for (int i = 0; i < monthlyTestScores.size(); i++) 
+        {
             sb.append(monthlyTestScores.get(i));
             if (i < monthlyTestScores.size() - 1) sb.append("|");
         }
         return sb.toString();
     }
 
-    public void displayPortalData(int rank, int totalStudents) {
+    public void displayPortalData(int rank, int totalStudents) 
+    {
         System.out.println("\n==========================================");
         System.out.println("             STUDENT PORTAL               ");
         System.out.println("==========================================");
@@ -78,19 +85,22 @@ class Student extends Person {
         System.out.printf(" Class Standing    : Rank %d out of %d students\n", rank, totalStudents);
         System.out.printf(" Monthly Attendance: %d%%\n", monthlyAttendance);
         System.out.print(" Recent Test Scores: ");
-        for (int score : monthlyTestScores) {
+        for (int score : monthlyTestScores) 
+        {
             System.out.print("[" + score + "/100] ");
         }
         System.out.println("\n==========================================");
     }
 }
 
-class Teacher extends Person {
+class Teacher extends Person 
+{
     private String teacherId;
     private int monthlyAttendance;
     private double salary;
 
-    public Teacher(String teacherId, String username, String password, String cnic, String phoneNo, int monthlyAttendance, double salary) {
+    public Teacher(String teacherId, String username, String password, String cnic, String phoneNo, int monthlyAttendance, double salary) 
+    {
         super(username, password, cnic, phoneNo);
         this.teacherId = teacherId;
         this.monthlyAttendance = monthlyAttendance;
@@ -106,7 +116,8 @@ class Teacher extends Person {
     public double getSalary() { return salary; }
     public void setSalary(double salary) { this.salary = salary; }
 
-    public void displayTeacherData() {
+    public void displayTeacherData() 
+    {
         System.out.println("\n==========================================");
         System.out.println("             TEACHER PORTAL               ");
         System.out.println("==========================================");
@@ -121,7 +132,8 @@ class Teacher extends Person {
 }
 
 // ================= 3. PORTAL DATABASE ENGINE =================
-class PortalSystem {
+class PortalSystem 
+{
     private ArrayList<Student> studentDatabase = new ArrayList<>();
     private ArrayList<Teacher> teacherDatabase = new ArrayList<>();
     
@@ -129,18 +141,21 @@ class PortalSystem {
     private final String TEACHER_FILE = "teachers_portal_data.txt";
     private final String MASTER_KEY = "Admin_2026"; // Your personal Master Key
 
-    public PortalSystem() {
+    public PortalSystem() 
+    {
         loadStudentsFromFile();
         loadTeachersFromFile();
         if (studentDatabase.isEmpty()) seedInitialStudents();
         if (teacherDatabase.isEmpty()) seedInitialTeachers();
     }
 
-    public boolean verifyMasterKey(String inputKey) {
+    public boolean verifyMasterKey(String inputKey) 
+    {
         return MASTER_KEY.equals(inputKey);
     }
 
-    private void seedInitialStudents() {
+    private void seedInitialStudents() 
+    {
         registerStudent("FA26-001", "ali_ahmed", "pass123", "35202-1111111-1", "0300-1111111", 3.82, 92, createScores(85, 90, 88));
         registerStudent("FA26-002", "zara_khan", "pass456", "35202-2222222-2", "0300-2222222", 3.95, 96, createScores(95, 98, 92));
         registerStudent("FA26-003", "usman_99", "pass789", "35202-3333333-3", "0300-3333333", 3.41, 80, createScores(70, 75, 82));
@@ -153,31 +168,38 @@ class PortalSystem {
         registerStudent("FA26-010", "sana_syed", "pass666", "35202-1010101-0", "0300-1010101", 3.89, 95, createScores(90, 93, 96));
     }
 
-    private void seedInitialTeachers() {
+    private void seedInitialTeachers() 
+    {
         registerTeacher("TCH-01", "prof_tariq", "teach123", "35201-9876543-1", "0321-9876543", 98, 120000.0);
         registerTeacher("TCH-02", "miss_nadia", "teach456", "35201-8765432-2", "0321-8765432", 95, 110000.0);
     }
 
-    private ArrayList<Integer> createScores(int s1, int s2, int s3) {
+    private ArrayList<Integer> createScores(int s1, int s2, int s3) 
+    {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(s1); list.add(s2); list.add(s3);
         return list;
     }
 
     // --- Uniqueness Checks ---
-    public boolean isUsernameTaken(String username) {
-        for (Student s : studentDatabase) {
+    public boolean isUsernameTaken(String username) 
+    {
+        for (Student s : studentDatabase) 
+        {
             if (s.getUsername().equalsIgnoreCase(username)) return true;
         }
-        for (Teacher t : teacherDatabase) {
+        for (Teacher t : teacherDatabase) 
+        {
             if (t.getUsername().equalsIgnoreCase(username)) return true;
         }
         return false;
     }
 
     // --- Student Operations ---
-    public boolean registerStudent(String rollNo, String username, String password, String cnic, String phoneNo, double cgpa, int attendance, ArrayList<Integer> scores) {
-        for (Student s : studentDatabase) {
+    public boolean registerStudent(String rollNo, String username, String password, String cnic, String phoneNo, double cgpa, int attendance, ArrayList<Integer> scores) 
+    {
+        for (Student s : studentDatabase) 
+        {
             if (s.getRollNo().equalsIgnoreCase(rollNo)) return false;
         }
         if (isUsernameTaken(username)) return false;
@@ -187,23 +209,29 @@ class PortalSystem {
         return true;
     }
 
-    public Student loginStudent(String username, String password) {
-        for (Student s : studentDatabase) {
+    public Student loginStudent(String username, String password) 
+    {
+        for (Student s : studentDatabase) 
+        {
             if (s.getUsername().equals(username) && s.getPassword().equals(password)) return s;
         }
         return null;
     }
 
-    public Student findStudentByRoll(String rollNo) {
-        for (Student s : studentDatabase) {
+    public Student findStudentByRoll(String rollNo) 
+    {
+        for (Student s : studentDatabase) 
+        {
             if (s.getRollNo().equalsIgnoreCase(rollNo)) return s;
         }
         return null;
     }
 
-    public boolean removeStudent(String rollNo) {
+    public boolean removeStudent(String rollNo) 
+    {
         Student target = findStudentByRoll(rollNo);
-        if (target != null) {
+        if (target != null) 
+        {
             studentDatabase.remove(target);
             saveAllStudentsToFile();
             return true;
@@ -211,8 +239,10 @@ class PortalSystem {
         return false;
     }
         // --- Teacher Operations ---
-    public boolean registerTeacher(String teacherId, String username, String password, String cnic, String phoneNo, int attendance, double salary) {
-        for (Teacher t : teacherDatabase) {
+    public boolean registerTeacher(String teacherId, String username, String password, String cnic, String phoneNo, int attendance, double salary) 
+    {
+        for (Teacher t : teacherDatabase) 
+        {
             if (t.getTeacherId().equalsIgnoreCase(teacherId)) return false;
         }
         if (isUsernameTaken(username)) return false;
@@ -221,24 +251,31 @@ class PortalSystem {
         saveAllTeachersToFile();
         return true;
     }
-    public Teacher loginTeacher(String username, String password) {
-        for (Teacher t : teacherDatabase) {
+    public Teacher loginTeacher(String username, String password) 
+    {
+        for (Teacher t : teacherDatabase)
+        {
             if (t.getUsername().equals(username) && t.getPassword().equals(password)) return t;
         }
         return null;
     }
-    public boolean verifyAnyTeacher(String username, String password) {
+    public boolean verifyAnyTeacher(String username, String password) 
+    {
         return loginTeacher(username, password) != null;
     }
-    public Teacher findTeacherById(String teacherId) {
-        for (Teacher t : teacherDatabase) {
+    public Teacher findTeacherById(String teacherId) 
+    {
+        for (Teacher t : teacherDatabase) 
+        {
             if (t.getTeacherId().equalsIgnoreCase(teacherId)) return t;
         }
         return null;
     }
-    public boolean removeTeacher(String teacherId) {
+    public boolean removeTeacher(String teacherId) 
+    {
         Teacher target = findTeacherById(teacherId);
-        if (target != null) {
+        if (target != null) 
+        {
             teacherDatabase.remove(target);
             saveAllTeachersToFile();
             return true;
@@ -249,36 +286,47 @@ class PortalSystem {
     public ArrayList<Student> getAllStudents() { return studentDatabase; }
     public ArrayList<Teacher> getAllTeachers() { return teacherDatabase; }
 
-    public int getStudentRank(Student target) {
+    public int getStudentRank(Student target) 
+    {
         ArrayList<Student> sortedList = new ArrayList<>(studentDatabase);
         sortedList.sort((s1, s2) -> Double.compare(s2.getCgpa(), s1.getCgpa()));
-        for (int i = 0; i < sortedList.size(); i++) {
+        for (int i = 0; i < sortedList.size(); i++) 
+        {
             if (sortedList.get(i).getRollNo().equals(target.getRollNo())) return i + 1;
         }
         return sortedList.size();
     }
     public int getTotalStudentCount() { return studentDatabase.size(); }
     // ================= 4. PERSISTENT FILE I/O =================
-    void saveAllStudentsToFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(STUDENT_FILE, false))) {
-            for (Student s : studentDatabase) {
+    void saveAllStudentsToFile() 
+    {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(STUDENT_FILE, false))) 
+        {
+            for (Student s : studentDatabase) 
+            {
                 writer.write(s.getRollNo() + "," + s.getUsername() + "," + s.getPassword() + "," +
                              s.getCnic() + "," + s.getPhoneNo() + "," + s.getCgpa() + "," +
                              s.getMonthlyAttendance() + "," + s.getScoresAsString());
                 writer.newLine();
             }
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             System.out.println("Error saving students: " + e.getMessage());
         }
     }
-    private void loadStudentsFromFile() {
+    private void loadStudentsFromFile() 
+    {
         File file = new File(STUDENT_FILE);
         if (!file.exists()) return;
-        try (BufferedReader reader = new BufferedReader(new FileReader(STUDENT_FILE))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(STUDENT_FILE))) 
+        {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) 
+            {
                 String[] data = line.split(",");
-                if (data.length == 8) {
+                if (data.length == 8) 
+                {
                     String[] scoresRaw = data[7].split("\\|");
                     ArrayList<Integer> scores = new ArrayList<>();
                     for (String sc : scoresRaw) scores.add(Integer.parseInt(sc));
@@ -286,45 +334,61 @@ class PortalSystem {
                                         Double.parseDouble(data[5]), Integer.parseInt(data[6]), scores));
                 }
             }
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             System.out.println("Error loading students: " + e.getMessage());
         }
     }
-    void saveAllTeachersToFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TEACHER_FILE, false))) {
-            for (Teacher t : teacherDatabase) {
+    void saveAllTeachersToFile() 
+    {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TEACHER_FILE, false))) 
+        {
+            for (Teacher t : teacherDatabase) 
+            {
                 writer.write(t.getTeacherId() + "," + t.getUsername() + "," + t.getPassword() + "," +
                              t.getCnic() + "," + t.getPhoneNo() + "," + t.getMonthlyAttendance() + "," +
                              t.getSalary());
                 writer.newLine();
             }
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             System.out.println("Error saving teachers: " + e.getMessage());
         }
     }
-    private void loadTeachersFromFile() {
+    private void loadTeachersFromFile() 
+    {
         File file = new File(TEACHER_FILE);
         if (!file.exists()) return;
-        try (BufferedReader reader = new BufferedReader(new FileReader(TEACHER_FILE))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(TEACHER_FILE))) 
+        {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) 
+            {
                 String[] data = line.split(",");
-                if (data.length == 7) {
+                if (data.length == 7) 
+                {
                     teacherDatabase.add(new Teacher(data[0], data[1], data[2], data[3], data[4],
                                         Integer.parseInt(data[5]), Double.parseDouble(data[6])));
                 }
             }
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             System.out.println("Error loading teachers: " + e.getMessage());
         }
     }
 }
 // ================= 5. MAIN APPLICATION & MENUS =================
-public class Student_Portal_Application {
-    public static void main(String[] args) {
+public class Student_Portal_Application 
+{
+    public static void main(String[] args) 
+    {
         PortalSystem portal = new PortalSystem();
         Scanner sc = new Scanner(System.in);
-        while (true) {
+        while (true) 
+        {
             System.out.println("\n=== CAMPUS HUB MANAGEMENT SYSTEM ===");
             System.out.println("1. Student Login");
             System.out.println("2. Register New Student");
@@ -333,109 +397,183 @@ public class Student_Portal_Application {
             System.out.println("5. Master Admin Panel (Requires Master Key)");
             System.out.println("6. Shut Down System");
             System.out.print("Select Action: ");
-            int choice = sc.nextInt();
+            int choice = getSafeInt(sc);
             sc.nextLine();
-            if (choice == 1) {
+            if (choice == 1) 
+            {
                 // STUDENT LOGIN
                 System.out.print("Username: ");
                 String user = sc.nextLine();
                 System.out.print("Password: ");
                 String pass = sc.nextLine();
                 Student s = portal.loginStudent(user, pass);
-                if (s != null) {
+                if (s != null) 
+                {
                     handleStudentDashboard(portal, sc, s);
-                } else {
+                } 
+                else 
+                {
                     System.out.println("Access Denied: Invalid student credentials.");
                 }
-            } else if (choice == 2) {
+            } 
+            else if (choice == 2) 
+            {
                 // REGISTER STUDENT
                 addNewStudentFlow(portal, sc);
-            } else if (choice == 3) {
+            } 
+            else if (choice == 3) 
+            {
                 // TEACHER LOGIN
                 System.out.print("Teacher Username: ");
                 String user = sc.nextLine();
                 System.out.print("Teacher Password: ");
                 String pass = sc.nextLine();
                 Teacher t = portal.loginTeacher(user, pass);
-                if (t != null) {
+                if (t != null) 
+                {
                     handleTeacherDashboard(portal, sc, t);
-                } else {
+                } 
+                else 
+                {
                     System.out.println("Access Denied: Invalid teacher credentials.");
                 }
-            } else if (choice == 4) {
+            } 
+            else if (choice == 4) 
+            {
                 // REGISTER TEACHER (REQUIRES MASTER KEY)
                 System.out.print("Enter Master Key to authorize teacher registration: ");
                 String key = sc.nextLine();
-                if (portal.verifyMasterKey(key)) {
+                if (portal.verifyMasterKey(key)) 
+                {
                     addNewTeacherFlow(portal, sc);
-                } else {
+                } 
+                else 
+                {
                     System.out.println("Authorization Failed: Incorrect Master Key!");
                 }
-            } else if (choice == 5) {
+            } 
+            else if (choice == 5) 
+            {
                 // MASTER ADMIN PANEL
                 System.out.print("Enter Master Key: ");
                 String key = sc.nextLine();
-                if (portal.verifyMasterKey(key)) {
+                if (portal.verifyMasterKey(key)) 
+                {
                     handleMasterAdminPanel(portal, sc);
-                } else {
+                } 
+                else 
+                {
                     System.out.println("Access Denied: Incorrect Master Key!");
                 }
-            } else if (choice == 6) {
+            } 
+            else if (choice == 6) 
+            {
                 System.out.println("Shutting down system cleanly...");
                 break;
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Invalid option!");
             }
         }
         sc.close();
     }
+
+    private static int getSafeInt(Scanner sc) 
+    {
+        while (true) 
+        {
+            try 
+            {
+                int val = Integer.parseInt(sc.nextLine().trim());
+                return val;
+            } 
+            catch (NumberFormatException e) 
+            {
+                System.out.print("Invalid input! Please enter a valid whole number: ");
+            }
+        }
+    }
+
+    private static double getSafeDouble(Scanner sc) 
+    {
+        while (true) 
+        {
+            try 
+            {
+                double val = Double.parseDouble(sc.nextLine().trim());
+                return val;
+            } 
+            catch (NumberFormatException e) 
+            {
+                System.out.print("Invalid input! Please enter a valid decimal number: ");
+            }
+        }
+    }
     // --- STUDENT DASHBOARD ---
-    private static void handleStudentDashboard(PortalSystem portal, Scanner sc, Student s) {
+    private static void handleStudentDashboard(PortalSystem portal, Scanner sc, Student s) 
+    {
         boolean active = true;
-        while (active) {
+        while (active) 
+        {
             s.displayPortalData(portal.getStudentRank(s), portal.getTotalStudentCount());
             System.out.println("--- Student Actions ---");
             System.out.println("1. Change Password");
             System.out.println("2. Change Username (Requires Teacher Approval)");
             System.out.println("3. Logout");
             System.out.print("Select action: ");
-            int act = sc.nextInt();
-        sc.nextLine();
-                    if (act == 1) {
+            int act = getSafeInt(sc);
+            sc.nextLine();
+            if (act == 1) 
+            {
                 System.out.print("Enter new password: ");
                 s.setPassword(sc.nextLine());
                 portal.saveAllStudentsToFile();
                 System.out.println("Password updated successfully!");
-            } else if (act == 2) {
+            } 
+            else if (act == 2) 
+            {
                 System.out.println("\n--- Teacher Approval Required ---");
                 System.out.print("Approving Teacher Username: ");
                 String tUser = sc.nextLine();
                 System.out.print("Approving Teacher Password: ");
                 String tPass = sc.nextLine();
-                if (portal.verifyAnyTeacher(tUser, tPass)) {
+                if (portal.verifyAnyTeacher(tUser, tPass)) 
+                {
                     System.out.print("Approval Granted! Enter desired new username: ");
                     String newUsername = sc.nextLine();
-                    if (!portal.isUsernameTaken(newUsername)) {
+                    if (!portal.isUsernameTaken(newUsername)) 
+                    {
                         s.setUsername(newUsername);
                         portal.saveAllStudentsToFile();
                         System.out.println("Username updated permanently!");
-                    } else {
+                    } 
+                    else 
+                    {
                         System.out.println("Error: That username is already taken.");
                     }
-                } else {
+                } 
+                else 
+                {
                     System.out.println("Approval Denied: Invalid teacher credentials.");
                 }
-            } else if (act == 3) {
+            } 
+            else if (act == 3) 
+            {
                 active = false;
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Invalid choice!");
             }
         }
     }
 
-    private static void handleTeacherDashboard(PortalSystem portal, Scanner sc, Teacher t) {
+    private static void handleTeacherDashboard(PortalSystem portal, Scanner sc, Teacher t) 
+    {
         boolean active = true;
-        while (active) {
+        while (active) 
+        {
             t.displayTeacherData();
             System.out.println("--- Teacher Actions ---");
             System.out.println("1. Modify a Student's Data");
@@ -443,29 +581,37 @@ public class Student_Portal_Application {
             System.out.println("3. Logout");
             System.out.print("Select action: ");
 
-            int act = sc.nextInt();
-            sc.nextLine();
+            int act = getSafeInt(sc);
 
-            if (act == 1) {
+            if (act == 1) 
+            {
                 System.out.print("Enter Student Roll No to modify (e.g. FA26-001): ");
                 Student target = portal.findStudentByRoll(sc.nextLine());
                 if (target != null) modifyStudentHelper(portal, sc, target);
                 else System.out.println("Student not found!");
-            } else if (act == 2) {
+            } 
+            else if (act == 2) 
+            {
                 System.out.print("Enter Master Key to unlock profile editing: ");
                 if (portal.verifyMasterKey(sc.nextLine())) modifyTeacherHelper(portal, sc, t);
                 else System.out.println("Authorization Failed: Incorrect Master Key!");
-            } else if (act == 3) {
+            } 
+            else if (act == 3) 
+            {
                 active = false;
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Invalid choice!");
             }
         }
     }
 
-    private static void handleMasterAdminPanel(PortalSystem portal, Scanner sc) {
+    private static void handleMasterAdminPanel(PortalSystem portal, Scanner sc) 
+    {
         boolean active = true;
-        while (active) {
+        while (active) 
+        {
             System.out.println("\n================ MASTER ADMIN PANEL ================");
             System.out.println("1. View All Students");
             System.out.println("2. Add New Student");
@@ -480,15 +626,16 @@ public class Student_Portal_Application {
             System.out.println("9. Exit Master Panel");
             System.out.print("Select Admin Action: ");
 
-            int act = sc.nextInt();
-            sc.nextLine();
+            int act = getSafeInt(sc);
 
-            switch (act) {
+            switch (act) 
+            {
                 case 1:
                     System.out.println("\n--- ALL REGISTERED STUDENTS ---");
-                    for (Student s : portal.getAllStudents()) {
+                    for (Student s : portal.getAllStudents()) 
+                    {
                         System.out.printf("Roll: %s | User: %s | CNIC: %s | Phone: %s | CGPA: %.2f | Attend: %d%%\n",
-                                s.getRollNo(), s.getUsername(), s.getCnic(), s.getPhoneNo(), s.getCgpa(), s.getMonthlyAttendance());
+                        s.getRollNo(), s.getUsername(), s.getCnic(), s.getPhoneNo(), s.getCgpa(), s.getMonthlyAttendance());
                     }
                     break;
                 case 2:
@@ -535,7 +682,8 @@ public class Student_Portal_Application {
         }
     }
 
-    private static void addNewStudentFlow(PortalSystem portal, Scanner sc) {
+    private static void addNewStudentFlow(PortalSystem portal, Scanner sc) 
+    {
         System.out.print("Set Roll No (e.g. FA26-011): ");
         String roll = sc.nextLine();
         System.out.print("Set Username: ");
@@ -547,26 +695,31 @@ public class Student_Portal_Application {
         System.out.print("Enter Phone No (e.g. 0300-1234567): ");
         String phone = sc.nextLine();
         System.out.print("Enter CGPA: ");
-        double cgpa = sc.nextDouble();
+        double cgpa = getSafeDouble(sc);
         System.out.print("Enter Monthly Attendance (%): ");
-        int attend = sc.nextInt();
+        int attend = getSafeInt(sc);
 
         ArrayList<Integer> scores = new ArrayList<>();
         System.out.println("Enter 3 recent monthly test scores:");
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 3; i++) 
+        {
             System.out.print("Test " + i + ": ");
-            scores.add(sc.nextInt());
+            scores.add(getSafeInt(sc));
         }
         sc.nextLine();
 
-        if (portal.registerStudent(roll, user, pass, cnic, phone, cgpa, attend, scores)) {
+        if (portal.registerStudent(roll, user, pass, cnic, phone, cgpa, attend, scores)) 
+        {
             System.out.println("Student added and saved permanently!");
-        } else {
+        } 
+        else 
+        {
             System.out.println("Failed: Roll No or Username already exists.");
         }
     }
 
-    private static void addNewTeacherFlow(PortalSystem portal, Scanner sc) {
+    private static void addNewTeacherFlow(PortalSystem portal, Scanner sc) 
+    {
         System.out.print("Set Teacher ID (e.g. TCH-03): ");
         String id = sc.nextLine();
         System.out.print("Set Username: ");
@@ -578,19 +731,23 @@ public class Student_Portal_Application {
         System.out.print("Enter Phone No: ");
         String phone = sc.nextLine();
         System.out.print("Enter Monthly Attendance (%): ");
-        int attend = sc.nextInt();
+        int attend = getSafeInt(sc);
         System.out.print("Enter Monthly Salary: ");
-        double salary = sc.nextDouble();
+        double salary = getSafeDouble(sc);
         sc.nextLine();
 
-        if (portal.registerTeacher(id, user, pass, cnic, phone, attend, salary)) {
+        if (portal.registerTeacher(id, user, pass, cnic, phone, attend, salary)) 
+        {
             System.out.println("Teacher added and saved permanently!");
-        } else {
+        } 
+        else 
+        {
             System.out.println("Failed: Teacher ID or Username already exists.");
         }
     }
 
-        private static void modifyStudentHelper(PortalSystem portal, Scanner sc, Student s) {
+    private static void modifyStudentHelper(PortalSystem portal, Scanner sc, Student s) 
+    {
         System.out.println("\nModifying Student: " + s.getRollNo() + " (" + s.getUsername() + ")");
         System.out.println("1. Update Roll No");
         System.out.println("2. Update Username");
@@ -600,52 +757,74 @@ public class Student_Portal_Application {
         System.out.println("6. Update Monthly Attendance");
         System.out.println("7. Update Test Scores");
         System.out.print("Choose field to update: ");
-        int opt = sc.nextInt();
+        int opt = getSafeInt(sc);
         sc.nextLine();
 
-        if (opt == 1) {
+        if (opt == 1) 
+        {
             System.out.print("New Roll No: ");
             String newRoll = sc.nextLine();
-            if (portal.findStudentByRoll(newRoll) == null || newRoll.equalsIgnoreCase(s.getRollNo())) {
+            if (portal.findStudentByRoll(newRoll) == null || newRoll.equalsIgnoreCase(s.getRollNo())) 
+            {
                 s.setRollNo(newRoll);
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Error: Roll No already exists.");
                 return;
             }
-        } else if (opt == 2) {
+        } 
+        else if (opt == 2) 
+        {
             System.out.print("New Username: ");
             String newU = sc.nextLine();
-            if (!portal.isUsernameTaken(newU) || newU.equalsIgnoreCase(s.getUsername())) {
+            if (!portal.isUsernameTaken(newU) || newU.equalsIgnoreCase(s.getUsername())) 
+            {
                 s.setUsername(newU);
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Error: Username already taken.");
                 return;
             }
-        } else if (opt == 3) {
+        } 
+        else if (opt == 3) 
+        {
             System.out.print("New Password: ");
             s.setPassword(sc.nextLine());
-        } else if (opt == 4) {
+        } 
+        else if (opt == 4) 
+        {
             System.out.print("New CNIC: ");
             s.setCnic(sc.nextLine());
             System.out.print("New Phone No: ");
             s.setPhoneNo(sc.nextLine());
-        } else if (opt == 5) {
+        } 
+        else if (opt == 5) 
+        {
             System.out.print("New CGPA: ");
-            s.setCgpa(sc.nextDouble());
+            s.setCgpa(getSafeDouble(sc));
             sc.nextLine();
-        } else if (opt == 6) {
+        } 
+        else if (opt == 6) 
+        {
             System.out.print("New Attendance (%): ");
-            s.setMonthlyAttendance(sc.nextInt());
+            s.setMonthlyAttendance(getSafeInt(sc));
             sc.nextLine();
-        } else if (opt == 7) {
+        } 
+        else if (opt == 7) 
+        {
             ArrayList<Integer> newScores = new ArrayList<>();
-            for (int i = 1; i <= 3; i++) {
+            for (int i = 1; i <= 3; i++) 
+            {
                 System.out.print("New Test " + i + " Score: ");
-                newScores.add(sc.nextInt());
+                newScores.add(getSafeInt(sc));
             }
             sc.nextLine();
             s.setMonthlyTestScores(newScores);
-        } else {
+        } 
+        else 
+        {
             System.out.println("Invalid choice.");
             return;
         }
@@ -653,7 +832,8 @@ public class Student_Portal_Application {
         System.out.println("Student record updated and saved to disk!");
     }
 
-    private static void modifyTeacherHelper(PortalSystem portal, Scanner sc, Teacher t) {
+    private static void modifyTeacherHelper(PortalSystem portal, Scanner sc, Teacher t) 
+    {
         System.out.println("\nModifying Teacher: " + t.getTeacherId() + " (" + t.getUsername() + ")");
         System.out.println("1. Update Teacher ID");
         System.out.println("2. Update Username & Password");
@@ -661,42 +841,59 @@ public class Student_Portal_Application {
         System.out.println("4. Update Monthly Attendance");
         System.out.println("5. Update Salary");
         System.out.print("Choose field to update: ");
-        int opt = sc.nextInt();
+        int opt = getSafeInt(sc);
         sc.nextLine();
 
-        if (opt == 1) {
+        if (opt == 1) 
+        {
             System.out.print("New Teacher ID: ");
             String newId = sc.nextLine();
-            if (portal.findTeacherById(newId) == null || newId.equalsIgnoreCase(t.getTeacherId())) {
+            if (portal.findTeacherById(newId) == null || newId.equalsIgnoreCase(t.getTeacherId())) 
+            {
                 t.setTeacherId(newId);
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Error: Teacher ID already exists.");
                 return;
             }
-        } else if (opt == 2) {
+        } 
+        else if (opt == 2) 
+        {
             System.out.print("New Username: ");
             String newU = sc.nextLine();
-            if (!portal.isUsernameTaken(newU) || newU.equalsIgnoreCase(t.getUsername())) {
+            if (!portal.isUsernameTaken(newU) || newU.equalsIgnoreCase(t.getUsername())) 
+            {
                 t.setUsername(newU);
-            } else {
+            } 
+            else 
+            {
                 System.out.println("Username already taken, keeping old username.");
             }
             System.out.print("New Password: ");
             t.setPassword(sc.nextLine());
-        } else if (opt == 3) {
+        } 
+        else if (opt == 3) 
+        {
             System.out.print("New CNIC: ");
             t.setCnic(sc.nextLine());
             System.out.print("New Phone No: ");
             t.setPhoneNo(sc.nextLine());
-        } else if (opt == 4) {
+        } 
+        else if (opt == 4) 
+        {
             System.out.print("New Attendance (%): ");
-            t.setMonthlyAttendance(sc.nextInt());
+            t.setMonthlyAttendance(getSafeInt(sc));
             sc.nextLine();
-        } else if (opt == 5) {
+        } 
+        else if (opt == 5) 
+        {
             System.out.print("New Salary: ");
-            t.setSalary(sc.nextDouble());
+            t.setSalary(getSafeDouble(sc));
             sc.nextLine();
-        } else {
+        } 
+        else 
+        {
             System.out.println("Invalid choice.");
             return;
         }
