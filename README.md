@@ -1,91 +1,51 @@
-# Campus Hub - Persistent Student Portal (OOP Java)
+# Campus Hub - Management & Portal System (OOP Java)
 
-A robust, console-based Student Portal application built in Java using core Object-Oriented Programming (OOP) paradigms. The system features a unique credential validation mechanism, a dynamic runtime ranking algorithm based on student CGPAs, and automated persistent text-file storage to save data across system restarts.
+A console-based Student and Teacher Management System built in Java using core Object-Oriented Programming (OOP) principles. The system features role-based access control (Master Admin, Teachers, and Students), inheritance-driven data modeling, dynamic CGPA class ranking, and automated persistent text-file storage.
 
 ---
 
-## Quick Start / Testing Credentials
+## Quick Start & Testing Credentials
 
-The system initializes automatically with **10 pre-seeded student accounts** inside the tracking database so you can test features right away. 
+The application automatically seeds **10 sample student accounts** and **2 sample teacher accounts** on first run so you can test all features immediately.
 
-To explore the portal, run the application, choose **Option 2 (Secure Student Login)**, and use any of these sample credentials:
-
-| Username | Password | Expected Performance Metrics |
+| Role | Login Credentials | Access & Capabilities |
 | :--- | :--- | :--- |
-| **zara_khan** | `pass456` | Top Tier (Displays Rank **1 out of 10** | CGPA: `3.95`) |
-| **fatima_a** | `secure77` | Mid Tier (Displays Rank **5 out of 10** | CGPA: `3.65`) |
-| **bilal_b** | `pass111` | Lower Tier (Displays Rank **9 out of 10** | CGPA: `2.95`) |
+| **Master Admin** | Master Key: `ADMIN2026` | Full system control: view, add, modify, and remove any student or teacher record. |
+| **Teacher (Sample 1)** | User: `prof_tariq` / Pass: `teach123` | View own profile, modify any student's records, and approve student username changes. |
+| **Teacher (Sample 2)** | User: `miss_nadia` / Pass: `teach456` | View own profile, modify any student's records, and approve student username changes. |
+| **Student (Top Rank)** | User: `zara_khan` / Pass: `pass456` | View personal portal (Rank **1 of 10**), change password, or change username with teacher approval. |
+| **Student (Mid Rank)** | User: `fatima_a` / Pass: `secure77` | View personal portal (Rank **5 of 10**), change password, or change username with teacher approval. |
 
 ---
 
-## 🛠️ Data Pipeline & Architecture Map
+## Core Features
 
-The system cleanly bifurcates raw persistence streams on your storage drive from active, operational object trees inside your computer's RAM.
-
-### 1. Persistent Storage Layer (`students_portal_data.txt`)
-Data is saved on disk as flat strings using a nested structural delimiter approach:
-```text
-FA26-001,ali_ahmed,pass123,3.82,92,85|90|88
-```
-* **Comma delimiter (`,`)**: Isolates distinct structural data fields (Roll Number, Username, Password, CGPA, Attendance percentage, and raw scores string block).
-* **Pipe delimiter (`|`)**: Used as an inner array separator to pack or unpack arbitrary lists of monthly test scores without corrupting the main layout parameters.
-
-### 2. Operational Memory Layer (RAM Runtime Structure)
-Upon boot, the program maps flat records into live, interacting object references:
-
-```text
-┌────────────────────────────────────────────────────────┐
-│                   studentDatabase                      │
-│                (ArrayList<Student>)                    │
-└──────────────────────────┬─────────────────────────────┘
-                           │
-         ┌─────────────────┴─────────────────┐
-         ▼                                   ▼
- ┌───────────────┐                   ┌───────────────┐
- │  Student [1]  │                   │  Student [2]  │
- ├───────────────┤                   ├───────────────┤
- │ Roll: ...001  │                   │ Roll: ...002  │
- │ User: ali...  │                   │ User: zara... │
- │ CGPA: 3.82    │                   │ CGPA: 3.95    │
- │ Attend: 92%   │                   │ Attend: 96%   │
- │ Scores: ──────┼──┐                │ Scores: ──────┼──┐
- └───────────────┘  │                └───────────────┘  │
-                    ▼                                   ▼
-         ┌───────────────────┐               ┌───────────────────┐
-         │ ArrayList<Integer>│               │ ArrayList<Integer>│
-         ├───────────────────┤               ├───────────────────┤
-         │  -> 85            │               │  -> 95            │
-         │  -> 90            │               │  -> 98            │
-         │  -> 88            │               │  -> 92            │
-         └───────────────────┘               └───────────────────┘
-```
+* **Master Admin Panel:** Protected by a Master Key to inspect all database records, register or remove teachers and students, and modify any profile field.
+* **Teacher Portal:** Allows faculty to view attendance and salary details, update student academic records, and authorize student username changes. Editing a teacher's own profile requires Master Key authorization.
+* **Student Portal:** Displays Roll Number, CNIC, Phone Number, CGPA, dynamic class standing, monthly attendance percentage, and recent test scores.
+* **Permanent File Storage:** Automatically reads and writes records to `students_portal_data.txt` and `teachers_portal_data.txt` so all changes persist after shutting down the program.
 
 ---
 
-## OOP Principles Applied
+## OOP Architecture
 
-* **Encapsulation**: All foundational fields inside `class Student` are explicitly defined as `private`. State modifications are blocked from external scopes, safely channeling access patterns strictly via immutable getter paths.
-* **Collections & Framework Manipulation**: Utilizes dynamic `ArrayList` allocations over standard arrays to securely host scale-free data records. Runtime student standing ranks are processed by cloning a decoupled memory slice and organizing elements via inline polymorphic `Comparator` definitions.
-* **Robust File I/O Management**: Replaces classic sequential C pointer hooks (`FILE *fp`) with automated Java streaming structures (`BufferedWriter` / `BufferedReader`). Bound directly inside try-with-resources conditions to guarantee safe file handle deallocation even during abrupt stack failures.
+* **Inheritance & Abstraction (`Person` Superclass):** Common attributes (`username`, `password`, `cnic`, `phoneNo`) are defined in an abstract `Person` superclass and inherited by both `Student` and `Teacher` subclasses.
+* **Encapsulation:** All class attributes are strictly `private` or `protected`, exposing state updates only through validated getters and setters.
+* **Collections & Sorting:** Uses dynamic `ArrayList` collections for runtime storage and clones the student list with a custom `Comparator` to calculate real-time class rankings without altering database order.
 
 ---
 
 ## How to Run Locally
 
-### Prerequisites
-* Java Development Kit (JDK 8 or higher) installed on your machine.
-* Git installed locally.
-
-### Execution Steps
-1. Clone this repository directly into your local workspace:
+1. Clone this repository:
    ```bash
-   git clone https://github.com
+   git clone https://github.com/mhassan22082007/Student_Portal.git
    ```
-2. Open your terminal inside the project directory and compile the main source code file:
+2. Navigate into the folder and compile the Java source file:
    ```bash
    javac Student_Portal_Application.java
    ```
-3. Run the compiled application file:
+3. Run the application:
    ```bash
-   java Main
+   java Student_Portal_Application
    ```
